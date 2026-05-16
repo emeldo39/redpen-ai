@@ -378,7 +378,7 @@ function FAQPage(){
 // ═══ MAIN APP ══════════════════════════════════════════════════════
 
 export default function App(){
-  const [mode,setMode]=useState("about");
+  const [mode,setMode]=useState("detect");
   const [input,setInput]=useState("");
   const [voiceSample,setVoiceSample]=useState("");
   const [showVoice,setShowVoice]=useState(false);
