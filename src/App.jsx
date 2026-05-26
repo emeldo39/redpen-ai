@@ -413,7 +413,7 @@ export default function App(){
   function reset(){setAppState("idle");setStage(0);setError("");setHDraft("");setHAudit([]);setHFinal("");setHChanges([]);setDScore(0);setDSummary("");setDFindings([]);setDClean([]);setGScore(0);setGGrade("");setGCount(0);setGSummary("");setGErrors([]);setGFixed("");setGStrengths([]);setPScore(0);setPRisk("");setPSummary("");setPMatches([]);setPOriginal([]);setPDisclaimer("");}
 
   async function callAPI(sys,user,extra={}){
-    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1500,system:sys,messages:[{role:"user",content:user}],...extra})});
+    const r = await fetch("/api/messages", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1500,system:sys,messages:[{role:"user",content:user}],...extra})});
     const d=await r.json(); if(!r.ok)throw new Error(d.error?.message||"API error");
     return d.content?.map(b=>b.text||"").join("")||"";
   }
@@ -440,7 +440,7 @@ export default function App(){
     const text=(msg||chatInput).trim();if(!text||chatLoading)return;
     setChatInput("");setChatError("");
     const nm=[...chatMsgs,{role:"user",content:text}];setChatMsgs(nm);setChatLoading(true);
-    try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:buildChatSystem(ctxOn?input:""),messages:nm})});
+    try{const r = await fetch("/api/messages", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:buildChatSystem(ctxOn?input:""),messages:nm})});
       const d=await r.json();if(!r.ok)throw new Error(d.error?.message||"API error");
       setChatMsgs(prev=>[...prev,{role:"assistant",content:d.content?.map(b=>b.text||"").join("")||""}]);
     }catch(e){setChatError(e.message);setChatMsgs(prev=>prev.slice(0,-1));}finally{setChatLoading(false);}
